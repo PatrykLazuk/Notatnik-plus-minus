@@ -13,24 +13,21 @@ namespace Notatnik
             rtbNotepadInputField.Enabled = false;
         }
 
-        private void bLoadFile_Click(object sender, EventArgs e)
+        private void RefreshFileList()
         {
-            if (lvFilesBrowser.SelectedItems.Count > 0)
+            rtbNotepadInputField.Enabled = false;
+            rtbNotepadInputField.Clear();
+            lvFilesBrowser.Items.Clear();
+            if (!(folderBrowseDialog.SelectedPath == ""))
             {
-                lFileNameLabel.Text = lvFilesBrowser.SelectedItems[0].Text;
-                rtbNotepadInputField.Enabled = true;
-                using (StreamReader reader = new StreamReader(lvFilesBrowser.SelectedItems[0].ToolTipText, detectEncodingFromByteOrderMarks: true))
+                foreach (var file in Directory.GetFiles(folderBrowseDialog.SelectedPath))
                 {
-                    rtbNotepadInputField.Text = reader.ReadToEnd();
+                    ListViewItem viewItem = new ListViewItem();
+                    viewItem.Text = Path.GetFileNameWithoutExtension(file);
+                    viewItem.ToolTipText = file;
+                    lvFilesBrowser.Items.Add(viewItem);
                 }
             }
-        }
-
-        private void bCreateFile_Click(object sender, EventArgs e)
-        {
-            rtbNotepadInputField.Enabled = true;
-            rtbNotepadInputField.Clear();
-            lFileNameLabel.Text = "...";
 
         }
 
@@ -40,6 +37,16 @@ namespace Notatnik
 
             RefreshFileList();
         }
+
+
+        private void bCreateFile_Click(object sender, EventArgs e)
+        {
+            rtbNotepadInputField.Enabled = true;
+            rtbNotepadInputField.Clear();
+            lFileNameLabel.Text = "...";
+
+        }
+
 
         private void bSaveButton_Click(object sender, EventArgs e)
         {
@@ -56,6 +63,27 @@ namespace Notatnik
             }
         }
 
+
+        private void bLoadFile_Click(object sender, EventArgs e)
+        {
+            if (lvFilesBrowser.SelectedItems.Count > 0)
+            {
+                lFileNameLabel.Text = lvFilesBrowser.SelectedItems[0].Text;
+                rtbNotepadInputField.Enabled = true;
+                using (StreamReader reader = new StreamReader(lvFilesBrowser.SelectedItems[0].ToolTipText, detectEncodingFromByteOrderMarks: true))
+                {
+                    rtbNotepadInputField.Text = reader.ReadToEnd();
+                }
+            }
+        }
+
+
+        private void bRenameFile_Click(object sender, EventArgs e)
+        {
+            //TODO przygotowac logike do zmiany nazwy pliku
+        }
+
+
         private void bDeleteFile_Click(object sender, EventArgs e)
         {
 
@@ -67,22 +95,7 @@ namespace Notatnik
             }
 
         }
-        public void RefreshFileList()
-        {
-            rtbNotepadInputField.Enabled = false;
-            rtbNotepadInputField.Clear();
-            lvFilesBrowser.Items.Clear();
-            if(!(folderBrowseDialog.SelectedPath==""))
-            {
-                foreach (var file in Directory.GetFiles(folderBrowseDialog.SelectedPath))
-                {
-                    ListViewItem viewItem = new ListViewItem();
-                    viewItem.Text = Path.GetFileNameWithoutExtension(file);
-                    viewItem.ToolTipText = file;
-                    lvFilesBrowser.Items.Add(viewItem);
-                }
-            }
-            
-        }
+
+        
     }
 }

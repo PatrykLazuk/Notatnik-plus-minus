@@ -71,6 +71,7 @@
             this.bRenameFile.TabIndex = 3;
             this.bRenameFile.Text = "Rename File";
             this.bRenameFile.UseVisualStyleBackColor = true;
+            this.bRenameFile.Click += new System.EventHandler(this.bRenameFile_Click);
             // 
             // bDeleteFile
             // 
